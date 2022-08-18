@@ -1,0 +1,27 @@
+
+.task-form{
+  margin: 2em auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-form input[type='text']{
+  height: 5vh;
+  padding: 0 0.5em;
+  font-size: 1.5em;
+  border: 1px solid #ccc;
+  min-width: 80%;
+}
+
+.task-form button[type='submit']{
+  height: 5vh;
+  width: 5vh;
+  border: none;
+  background: #E63946;
+  color: #ffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

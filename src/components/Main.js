@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import Form from './Form';
+import TaskList from './TaskList';
 import './Main.css';
-
-import { FaPlus, FaEdit, FaWindowClose } from 'react-icons/fa';
 
 export default class Main extends Component {
   state = {
@@ -9,6 +9,20 @@ export default class Main extends Component {
     taskList: [],
     index: -1,
   };
+
+  componentDidMount() {
+    const taskList = JSON.parse(localStorage.getItem('taskList'));
+    if (!taskList) return;
+
+    this.setState({ taskList });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { taskList } = this.state;
+    if (taskList === prevState.taskList) return;
+
+    localStorage.setItem('taskList', JSON.stringify(taskList));
+  }
 
   handleInputChange = (e) => {
     this.setState({
@@ -19,8 +33,10 @@ export default class Main extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { taskList, index } = this.state;
+
     let { newTask } = this.state;
     newTask = newTask.trim();
+    if (!newTask) return;
 
     if (taskList.indexOf(newTask) !== -1) return;
 
@@ -69,34 +85,17 @@ export default class Main extends Component {
       <div className="main">
         <h1>To Do List</h1>
 
-        <form action="#" onSubmit={this.handleSubmit} className="task-form">
-          <input
-            onChange={this.handleInputChange}
-            type="text"
-            value={newTask}
-          />
-          <button type="submit">
-            <FaPlus />
-          </button>
-        </form>
+        <Form
+          handleSubmit={this.handleSubmit}
+          handleInputChange={this.handleInputChange}
+          newTask={newTask}
+        />
 
-        <ul className="tasks">
-          {taskList.map((task, index) => (
-            <li key={task}>
-              {task}
-              <span>
-                <FaEdit
-                  className="edit"
-                  onClick={(e) => this.handleEdit(e, index)}
-                />
-                <FaWindowClose
-                  className="delete"
-                  onClick={(e) => this.handleDelete(e, index)}
-                />
-              </span>
-            </li>
-          ))}
-        </ul>
+        <TaskList
+          handleDelete={this.handleDelete}
+          handleEdit={this.handleEdit}
+          taskList={taskList}
+        />
       </div>
     );
   }
